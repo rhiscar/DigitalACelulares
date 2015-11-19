@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 04/06/2015 11:21:49 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="br.com.digitala.banco.ItemsPedido" table="items_pedido" catalog="digitala">
+        <composite-id name="id" class="br.com.digitala.banco.ItemsPedidoId">
+            <key-property name="idPedido" type="int">
+                <column name="idPedido" />
+            </key-property>
+            <key-property name="idProduto" type="int">
+                <column name="idProduto" />
+            </key-property>
+        </composite-id>
+        <property name="valorProduto" type="big_decimal">
+            <column name="valor_produto" precision="10" not-null="true" />
+        </property>
+        <property name="qtdProduto" type="int">
+            <column name="qtd_produto" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

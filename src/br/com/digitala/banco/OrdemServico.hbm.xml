@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 04/06/2015 11:21:49 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="br.com.digitala.banco.OrdemServico" table="ordem_servico" catalog="digitala">
+        <id name="idOrdemServico" type="java.lang.Integer">
+            <column name="idOrdem_Servico" />
+            <generator class="identity" />
+        </id>
+        <property name="idServico" type="java.lang.Integer">
+            <column name="idServico" />
+        </property>
+        <property name="valorTotal" type="big_decimal">
+            <column name="Valor_Total" precision="10" not-null="true" />
+        </property>
+        <property name="dataEntrada" type="timestamp">
+            <column name="Data_Entrada" length="19" not-null="true" />
+        </property>
+        <property name="dataEntrega" type="timestamp">
+            <column name="Data_Entrega" length="19" not-null="true" />
+        </property>
+        <property name="observacoes" type="string">
+            <column name="Observacoes" length="500" />
+        </property>
+        <property name="idStatus" type="int">
+            <column name="idStatus" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
