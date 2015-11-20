@@ -148,17 +148,27 @@ public class CategoriaHome {
 	}
 
 	public List<Categoria> findByExample(Categoria instance) {
-		log.debug("finding Categoria instance by example");
+		log.debug("finding Categoria instance by example" + instance);
+		System.out.println("criterio de busca de categorias: " + instance);
 		try {
-			sessionFactory.getCurrentSession().beginTransaction();
-			List<Categoria> results = (List<Categoria>) sessionFactory
+			Transaction t = sessionFactory.getCurrentSession().beginTransaction();
+			List<Categoria> results;
+			if (instance != null && instance.getIdCategoria() != null && instance.getNome() != null && instance.getDescricao() != null) {
+				results = (List<Categoria>) sessionFactory
 					.getCurrentSession()
 					.createCriteria("br.com.digitala.banco.Categoria")
 					.add(create(instance)).list();
+			} else {
+				results = (List<Categoria>) sessionFactory
+						.getCurrentSession()
+						.createCriteria("br.com.digitala.banco.Categoria")
+						.list();
+			}
 			log.debug("find by example successful, result size: " + results.size());
-			sessionFactory.getCurrentSession().beginTransaction().commit();
+			t.commit();
 			return results;
 		} catch (RuntimeException re) {
+			re.printStackTrace();
 			log.error("find by example failed", re);
 			throw re;
 		}
