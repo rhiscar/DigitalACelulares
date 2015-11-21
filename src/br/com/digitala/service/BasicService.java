@@ -27,14 +27,13 @@ public abstract class BasicService<T> {
 	protected abstract String executaInsercao(T dto);
 	
 	@DELETE
-	@Path("/remove")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/remove/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String remove(T dto) throws Exception {
-		return executaRemove(dto);
+	public String remove(@PathParam("id") Integer id) throws Exception {
+		return executaRemove(id);
 	}
 	
-	protected abstract String executaRemove(T dto);
+	protected abstract String executaRemove(Integer id);
 	
 	@GET
 	@Path("/busca/id/{id}")

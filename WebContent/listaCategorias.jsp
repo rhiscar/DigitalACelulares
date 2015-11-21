@@ -167,7 +167,7 @@
               
               obj += "<tr>";
               obj += "<td><div onclick=\"editarRegistro('" + cad.idCategoria + "')\" class=\"icon-edit-modify-streamline\" data-toggle=\"modal\" data-target=\"#divDadosCategoria\">&nbsp;</div></td>";
-              obj += "<td><div onclick=\"removerRegistro('" + cad.idCategoria + "')\" class=\"icon-delete-garbage-streamline\" data-toggle=\"modal\" data-target=\"#divDadosCategoria\">&nbsp;</div></td>";
+              obj += "<td><div onclick=\"removerRegistro('" + cad.idCategoria + "')\" class=\"icon-delete-garbage-streamline\">&nbsp;</div></td>";
               obj += "<td>"+cad.nome+"</td>";
               obj += "<td>"+cad.descricao+"</td>";
               obj += "</tr>";
@@ -177,7 +177,7 @@
           
           function carregaFormulario(dados) {
             limpaErrosFormulario();
-            alert(dados.idCategoria);
+            //(dados.idCategoria);
             $("#idCategoria").val(dados.idCategoria);
             $("#nomeCategoria").val(dados.nome);
             $("#descCategoria").val(dados.descricao);
@@ -192,25 +192,40 @@
               //dataType: 'json',
               contentType: 'application/json',
               success: function(dados) {
-                carregaFormulario(dados);
+            	  buscaDados();
               }
             });
           }
           
           function removerRegistro(id) {
-            alert("Removendo o registro " + id);
+        	  if (confirm ("Confirma remoção do registro?")) {
+	        	  $.ajax({
+	                  url: 'rest/'+servicoAtual+'/remove/'+id,
+	                  type: 'DELETE',
+	                  //data: JSON.stringify(formulario),
+	                  //dataType: 'json',
+	                  contentType: 'application/json',
+	                  success: function(dados) {
+	                	  buscaDados();
+	                  }
+	                });
+      		  }
           }
           
-          $.ajax({
-              url: 'rest/'+servicoAtual+'/pesquisa/*',
-              type: 'GET',
-              //data: JSON.stringify(formulario),
-              //dataType: 'json',
-              contentType: 'application/json',
-              success: function(data) {
-                carregaListagem(data);
-              }
-          });
+          function buscaDados(){
+	          $.ajax({
+	              url: 'rest/'+servicoAtual+'/pesquisa/*',
+	              type: 'GET',
+	              //data: JSON.stringify(formulario),
+	              //dataType: 'json',
+	              contentType: 'application/json',
+	              success: function(data) {
+	                carregaListagem(data);
+	              }
+	          });
+          }
+          
+          buscaDados();
 
         </script>
     </body>

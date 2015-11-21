@@ -6,11 +6,9 @@ import static org.hibernate.criterion.Example.create;
 
 import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,59 +17,23 @@ import javax.sql.DataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 /**
  * Home object for domain model class Categoria.
  * @see br.com.digitala.banco.Categoria
  * @author Hibernate Tools
  */
-public class CategoriaHome {
+public class CategoriaHome extends PersistenciaHome {
 
 	private static final Log log = LogFactory.getLog(CategoriaHome.class);
-
-	private final SessionFactory sessionFactory = getSessionFactory();
-
-	protected SessionFactory getSessionFactory() {
-		try {
-			/*
-			return (SessionFactory) new InitialContext().lookup("java:/comp/env/jdbc/digitala");
-			
-			System.out.println("Indo buscar a sessionfactory pro categoria home: criando tudo a partir do cfg do hibernate");
-			
-			Configuration configuration = new Configuration();
-			Class.forName("com.mysql.jdbc.Driver");
-			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-		    configuration.configure(new File("C:/trabalho/projetos java/DigitalACelulares/src/hibernate.cfg.xml"));
-			
-		    ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-		    
-		    
-			return (SessionFactory) configuration.buildSessionFactory(serviceRegistry);
-			*/
-			Configuration configuration = new Configuration();
-	        configuration.configure("hibernate.cfg.xml");
-	         
-	        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-	        SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
-	        return sessionFactory;
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException(
-					"Could not locate SessionFactory in JNDI");
-		}
-	}
 
 	public void persist(Categoria transientInstance) {
 		log.debug("persisting Categoria instance");
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().persist(transientInstance);
+			t.commit();
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
@@ -82,7 +44,9 @@ public class CategoriaHome {
 	public void attachDirty(Categoria instance) {
 		log.debug("attaching dirty Categoria instance");
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().saveOrUpdate(instance);
+			t.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -93,12 +57,11 @@ public class CategoriaHome {
 	public void attachClean(Categoria instance) {
 		log.debug("attaching clean Categoria instance");
 		try {
-			Session session=getSessionFactory().getCurrentSession();
-		    Transaction trans=session.beginTransaction();
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
 
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			getSessionFactory().getCurrentSession().lock(instance, LockMode.OPTIMISTIC);
 
-			trans.commit();
+			t.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -108,10 +71,14 @@ public class CategoriaHome {
 
 	public void delete(Categoria persistentInstance) {
 		log.debug("deleting Categoria instance");
+		System.out.println("deleting Categoria instance");
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().delete(persistentInstance);
+			t.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
+			re.printStackTrace();
 			log.error("delete failed", re);
 			throw re;
 		}
@@ -120,8 +87,9 @@ public class CategoriaHome {
 	public Categoria merge(Categoria detachedInstance) {
 		log.debug("merging Categoria instance");
 		try {
-			Categoria result = (Categoria) sessionFactory.getCurrentSession()
-					.merge(detachedInstance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			Categoria result = (Categoria) getSessionFactory().getCurrentSession().merge(detachedInstance);
+			t.commit();
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -133,13 +101,15 @@ public class CategoriaHome {
 	public Categoria findById(java.lang.Integer id) {
 		log.debug("getting Categoria instance with id: " + id);
 		try {
-			Categoria instance = (Categoria) sessionFactory.getCurrentSession()
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			Categoria instance = (Categoria) getSessionFactory().getCurrentSession()
 					.get("br.com.digitala.banco.Categoria", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
 			}
+			t.commit();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -149,17 +119,16 @@ public class CategoriaHome {
 
 	public List<Categoria> findByExample(Categoria instance) {
 		log.debug("finding Categoria instance by example" + instance);
-		System.out.println("criterio de busca de categorias: " + instance);
 		try {
-			Transaction t = sessionFactory.getCurrentSession().beginTransaction();
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
 			List<Categoria> results;
 			if (instance != null && instance.getIdCategoria() != null && instance.getNome() != null && instance.getDescricao() != null) {
-				results = (List<Categoria>) sessionFactory
+				results = (List<Categoria>) getSessionFactory()
 					.getCurrentSession()
 					.createCriteria("br.com.digitala.banco.Categoria")
 					.add(create(instance)).list();
 			} else {
-				results = (List<Categoria>) sessionFactory
+				results = (List<Categoria>) getSessionFactory()
 						.getCurrentSession()
 						.createCriteria("br.com.digitala.banco.Categoria")
 						.list();

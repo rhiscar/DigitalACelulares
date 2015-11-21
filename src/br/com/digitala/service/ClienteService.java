@@ -1,79 +1,50 @@
 package br.com.digitala.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Path;
 
 import br.com.digitala.banco.Cliente;
+import br.com.digitala.banco.ClienteHome;
 
 @Path("/servicoCliente")
 public class ClienteService extends BasicService<Cliente> {
 	
+	
+	ClienteHome sql = new  ClienteHome();
+	
 	@Override
 	protected String executaInsercao(Cliente dto) {
-		Cliente ret = new Cliente();
-		
-		ret.setIdCliente(1);
-		ret.setNome(dto.getNome());
-		ret.setUsuario(dto.getUsuario());
-
-		String r = gson.toJson(ret); 
-		
+		sql.attachClean(dto);
+		String r = gson.toJson(dto); 
 		System.out.println("Retorno de cliente criada: " + r);
-		
 		return r;
 	}
 
 	@Override
-	protected String executaRemove(Cliente dto) {
-		Cliente ret = new Cliente();
-		
-		ret.setIdCliente(1);
-		ret.setNome(dto.getNome());
-		ret.setUsuario(dto.getUsuario());
-
+	protected String executaRemove(Integer id) {
+		Cliente ret = sql.findById(id);
+		sql.delete(ret);
 		String r = gson.toJson(ret);
-		
 		System.out.println("Retorno de cliente removida: " + r);
-		
 		return r;
 	}
 
 	@Override
 	protected String executaBusca(Integer pk) {
-		Cliente ret = new Cliente();
-		
-		ret.setIdCliente(pk);
-		ret.setNome("Cliente " + pk);
-		ret.setUsuario("Usuario da cliente " + pk);
-		
+		Cliente ret = sql.findById(pk);
 		String r = gson.toJson(ret);
-		
 		System.out.println("Retorno de busca de cliente: " + r);
-		
 		return r;
 	}
 
 	@Override
 	protected String executaPesquisa(String texto) {
-		List<Cliente> lista = new ArrayList<Cliente>();
-		for (Integer i = 0; i < 10; i++) {
-			Cliente c = new Cliente();
-			
-			c.setIdCliente(i);
-			c.setNome("Nome cliente " + texto + " " + i);
-			c.setUsuario("Nome descricao " + texto + " " + i);
-			c.setEmail("email cliente " + texto + " " + i);
-			c.setTelefone("telefone cliente " + texto + " " + i);
-			
-			lista.add(c);
-		}
-		
+		Cliente c = new Cliente();
+		c.setNome(texto);
+		List<Cliente> lista = sql.findByExample(c);
 		String r = gson.toJson(lista);
-		
 		System.out.println("Retorno de lista de cliente: " + r);
-		
 		return r;
 	}
 }

@@ -2,40 +2,30 @@ package br.com.digitala.banco;
 
 // Generated 04/06/2015 11:21:49 by Hibernate Tools 3.4.0.CR1
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
-import javax.naming.InitialContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
-import org.hibernate.SessionFactory;
-import static org.hibernate.criterion.Example.create;
+import org.hibernate.Transaction;
 
 /**
  * Home object for domain model class Empresa.
  * @see br.com.digitala.banco.Empresa
  * @author Hibernate Tools
  */
-public class EmpresaHome {
+public class EmpresaHome extends PersistenciaHome {
 
 	private static final Log log = LogFactory.getLog(EmpresaHome.class);
-
-	private final SessionFactory sessionFactory = getSessionFactory();
-
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext()
-					.lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException(
-					"Could not locate SessionFactory in JNDI");
-		}
-	}
 
 	public void persist(Empresa transientInstance) {
 		log.debug("persisting Empresa instance");
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().persist(transientInstance);
+			t.commit();
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
@@ -46,7 +36,9 @@ public class EmpresaHome {
 	public void attachDirty(Empresa instance) {
 		log.debug("attaching dirty Empresa instance");
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().saveOrUpdate(instance);
+			t.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -57,7 +49,9 @@ public class EmpresaHome {
 	public void attachClean(Empresa instance) {
 		log.debug("attaching clean Empresa instance");
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().lock(instance, LockMode.NONE);
+			t.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -68,7 +62,9 @@ public class EmpresaHome {
 	public void delete(Empresa persistentInstance) {
 		log.debug("deleting Empresa instance");
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().delete(persistentInstance);
+			t.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -79,8 +75,10 @@ public class EmpresaHome {
 	public Empresa merge(Empresa detachedInstance) {
 		log.debug("merging Empresa instance");
 		try {
-			Empresa result = (Empresa) sessionFactory.getCurrentSession()
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			Empresa result = (Empresa) getSessionFactory().getCurrentSession()
 					.merge(detachedInstance);
+			t.commit();
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -92,8 +90,10 @@ public class EmpresaHome {
 	public Empresa findById(java.lang.Integer id) {
 		log.debug("getting Empresa instance with id: " + id);
 		try {
-			Empresa instance = (Empresa) sessionFactory.getCurrentSession()
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			Empresa instance = (Empresa) getSessionFactory().getCurrentSession()
 					.get("br.com.digitala.banco.Empresa", id);
+			t.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -109,12 +109,22 @@ public class EmpresaHome {
 	public List<Empresa> findByExample(Empresa instance) {
 		log.debug("finding Empresa instance by example");
 		try {
-			List<Empresa> results = (List<Empresa>) sessionFactory
-					.getCurrentSession()
-					.createCriteria("br.com.digitala.banco.Empresa")
-					.add(create(instance)).list();
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			List<Empresa> results;
+			
+			if (instance != null && instance.getNome() != null) {
+				results = (List<Empresa>) getSessionFactory()
+						.getCurrentSession()
+						.createCriteria("br.com.digitala.banco.Empresa")
+						.add(create(instance)).list();
+			} else {
+				results = (List<Empresa>) getSessionFactory()
+						.getCurrentSession()
+						.createCriteria("br.com.digitala.banco.Empresa").list();	
+			}
 			log.debug("find by example successful, result size: "
 					+ results.size());
+			t.commit();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);

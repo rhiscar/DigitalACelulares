@@ -2,40 +2,31 @@ package br.com.digitala.banco;
 
 // Generated 04/06/2015 11:21:49 by Hibernate Tools 3.4.0.CR1
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
-import javax.naming.InitialContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
-import org.hibernate.SessionFactory;
-import static org.hibernate.criterion.Example.create;
+import org.hibernate.Transaction;
 
 /**
  * Home object for domain model class Produto.
  * @see br.com.digitala.banco.Produto
  * @author Hibernate Tools
  */
-public class ProdutoHome {
+public class ProdutoHome extends PersistenciaHome {
 
 	private static final Log log = LogFactory.getLog(ProdutoHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
-
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext()
-					.lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException(
-					"Could not locate SessionFactory in JNDI");
-		}
-	}
-
+	
 	public void persist(Produto transientInstance) {
 		log.debug("persisting Produto instance");
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().persist(transientInstance);
+			t.commit();
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
@@ -46,7 +37,9 @@ public class ProdutoHome {
 	public void attachDirty(Produto instance) {
 		log.debug("attaching dirty Produto instance");
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().saveOrUpdate(instance);
+			t.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -57,7 +50,9 @@ public class ProdutoHome {
 	public void attachClean(Produto instance) {
 		log.debug("attaching clean Produto instance");
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().lock(instance, LockMode.NONE);
+			t.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -68,7 +63,9 @@ public class ProdutoHome {
 	public void delete(Produto persistentInstance) {
 		log.debug("deleting Produto instance");
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			getSessionFactory().getCurrentSession().delete(persistentInstance);
+			t.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -79,8 +76,10 @@ public class ProdutoHome {
 	public Produto merge(Produto detachedInstance) {
 		log.debug("merging Produto instance");
 		try {
-			Produto result = (Produto) sessionFactory.getCurrentSession()
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			Produto result = (Produto) getSessionFactory().getCurrentSession()
 					.merge(detachedInstance);
+			t.commit();
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -92,8 +91,10 @@ public class ProdutoHome {
 	public Produto findById(java.lang.Integer id) {
 		log.debug("getting Produto instance with id: " + id);
 		try {
-			Produto instance = (Produto) sessionFactory.getCurrentSession()
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			Produto instance = (Produto) getSessionFactory().getCurrentSession()
 					.get("br.com.digitala.banco.Produto", id);
+			t.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -109,10 +110,19 @@ public class ProdutoHome {
 	public List<Produto> findByExample(Produto instance) {
 		log.debug("finding Produto instance by example");
 		try {
-			List<Produto> results = (List<Produto>) sessionFactory
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			List<Produto> results; 
+			if (instance != null && instance.getNome() != null) {
+				results = (List<Produto>) getSessionFactory()
 					.getCurrentSession()
 					.createCriteria("br.com.digitala.banco.Produto")
 					.add(create(instance)).list();
+			} else {
+				results = (List<Produto>) getSessionFactory()
+						.getCurrentSession()
+						.createCriteria("br.com.digitala.banco.Produto").list();
+			}
+			t.commit();
 			log.debug("find by example successful, result size: "
 					+ results.size());
 			return results;

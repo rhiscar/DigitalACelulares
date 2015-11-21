@@ -1,79 +1,54 @@
 package br.com.digitala.service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Path;
 
 import br.com.digitala.banco.Pedido;
+import br.com.digitala.banco.PedidoHome;
 import br.com.digitala.banco.PedidoId;
 
 @Path("/servicoPedido")
 public class PedidoService extends BasicService<Pedido> {
 	
+	PedidoHome sql = new PedidoHome();
+	
 	@Override
 	protected String executaInsercao(Pedido dto) {
-		Pedido ret = new Pedido();
-		
-		ret.setId(dto.getId());
-		ret.setDataPedido(dto.getDataPedido());
-		ret.setObservacoes(dto.getObservacoes());
-
-		String r = gson.toJson(ret); 
-		
+		sql.attachClean(dto);
+		String r = gson.toJson(dto); 
 		System.out.println("Retorno de pedido criada: " + r);
-		
 		return r;
 	}
 
 	@Override
-	protected String executaRemove(Pedido dto) {
-		Pedido ret = new Pedido();
-		
-		ret.setId(dto.getId());
-		ret.setDataPedido(dto.getDataPedido());
-		ret.setObservacoes(dto.getObservacoes());
-
+	protected String executaRemove(Integer id) {
+		PedidoId pi = new PedidoId();
+		pi.setIdpedido(id);
+		Pedido ret = sql.findById(pi);
+		sql.delete(ret);
 		String r = gson.toJson(ret);
-		
 		System.out.println("Retorno de pedido removida: " + r);
-		
 		return r;
 	}
 
 	@Override
 	protected String executaBusca(Integer pk) {
-		Pedido ret = new Pedido();
-		
-		ret.setId(new PedidoId(1,1));
-		ret.setDataPedido(new Date());
-		ret.setObservacoes("Descricao da pedido " + pk);
-		
+		PedidoId pi = new PedidoId();
+		pi.setIdpedido(pk);
+		Pedido ret = sql.findById(pi);
 		String r = gson.toJson(ret);
-		
 		System.out.println("Retorno de busca de pedido: " + r);
-		
 		return r;
 	}
 
 	@Override
 	protected String executaPesquisa(String texto) {
-		List<Pedido> lista = new ArrayList<Pedido>();
-		for (Integer i = 0; i < 10; i++) {
-			Pedido c = new Pedido();
-			
-			c.setId(new PedidoId(1,1));
-			c.setDataPedido(new Date());
-			c.setObservacoes("Nome descricao " +  texto + " " + i);
-			
-			lista.add(c);
-		}
-		
+		Pedido c = new Pedido();
+		c.setIdStatus(texto != null ? Integer.parseInt(texto) : null);
+		List<Pedido> lista = sql.findByExample(c);
 		String r = gson.toJson(lista);
-		
 		System.out.println("Retorno de lista de pedido: " + r);
-		
 		return r;
 	}
 }
