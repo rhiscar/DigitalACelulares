@@ -112,7 +112,7 @@ public class ProdutoHome extends PersistenciaHome {
 		try {
 			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
 			List<Produto> results; 
-			if (instance != null && instance.getNome() != null) {
+			if (instance != null && instance.getNome() != null && !"".equals(instance.getNome())) {
 				results = (List<Produto>) getSessionFactory()
 					.getCurrentSession()
 					.createCriteria("br.com.digitala.banco.Produto")
@@ -123,10 +123,10 @@ public class ProdutoHome extends PersistenciaHome {
 						.createCriteria("br.com.digitala.banco.Produto").list();
 			}
 			t.commit();
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
+			re.printStackTrace();
 			log.error("find by example failed", re);
 			throw re;
 		}

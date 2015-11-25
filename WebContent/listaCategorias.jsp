@@ -20,11 +20,11 @@
         <div class="row">
           <div class="col-md-6 col-sm-6 centered">
             <div class="space-sep40"></div>
-            <h5>Listagem de categorias</h5>
+            <h5>Listagem de categorias </h5>
             <table id="listaCategorias" class="table hover">
               <thead>
                 <tr>
-                  <th width="20px">&nbsp;</th>
+                  <th width="20px"><div onclick="novoItem()" class="icon-file-add" data-toggle="modal" data-target="#divDadosCategoria">&nbsp;</div></th>
                   <th width="20px">&nbsp;</th>
                   <th>Nome</th>
                   <th>Descricao</th>
@@ -32,8 +32,8 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Item #</td>
-                  <td>Description</td>
+                  <td>&nbsp;</td>
+                  <td>Carregando dados...</td>
                 </tr>
               </tbody>
              </table>
@@ -131,9 +131,13 @@
               dataType: 'json',
               contentType: 'application/json',
               success: function(dados) {
-                history.reload();
+            	  history.reload();
               }
             });
+          }
+          
+          function novoItem() {
+        	  limpaErrosFormulario();
           }
           
           function validaFormulario(formulario) {
@@ -192,7 +196,7 @@
               //dataType: 'json',
               contentType: 'application/json',
               success: function(dados) {
-            	  buscaDados();
+            	  carregaFormulario(dados);
               }
             });
           }

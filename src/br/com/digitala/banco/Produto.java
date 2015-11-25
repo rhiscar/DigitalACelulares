@@ -10,19 +10,19 @@ import java.math.BigDecimal;
 public class Produto implements java.io.Serializable {
 
 	private Integer idProduto;
+	private Integer idCategoria;
 	private String nome;
 	private String descricao;
 	private String marca;
 	private String modelo;
-	private BigDecimal valorProduto;
+	private Float valorProduto;
 	private String caminhoFoto;
-	private int idCategoria;
 
 	public Produto() {
 	}
 
-	public Produto(String nome, String descricao, BigDecimal valorProduto,
-			int idCategoria) {
+	public Produto(String nome, String descricao, Float valorProduto,
+			Integer idCategoria) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.valorProduto = valorProduto;
@@ -30,7 +30,7 @@ public class Produto implements java.io.Serializable {
 	}
 
 	public Produto(String nome, String descricao, String marca, String modelo,
-			BigDecimal valorProduto, int idCategoria) {
+			Float valorProduto, Integer idCategoria) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.marca = marca;
@@ -79,19 +79,19 @@ public class Produto implements java.io.Serializable {
 		this.modelo = modelo;
 	}
 
-	public BigDecimal getValorProduto() {
+	public Float getValorProduto() {
 		return this.valorProduto;
 	}
 
-	public void setValorProduto(BigDecimal valorProduto) {
+	public void setValorProduto(Float valorProduto) {
 		this.valorProduto = valorProduto;
 	}
 
-	public int getIdCategoria() {
+	public Integer getIdCategoria() {
 		return this.idCategoria;
 	}
 
-	public void setIdCategoria(int idCategoria) {
+	public void setIdCategoria(Integer idCategoria) {
 		this.idCategoria = idCategoria;
 	}
 

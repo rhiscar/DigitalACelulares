@@ -14,7 +14,8 @@ public class ProdutoService extends BasicService<Produto> {
 	
 	@Override
 	protected String executaInsercao(Produto dto) {
-		sql.attachClean(dto);
+		System.out.println("Produto a ser criada: " + dto);
+		sql.merge(dto);
 		String r = gson.toJson(dto); 
 		System.out.println("Retorno de produto criada: " + r);
 		return r;

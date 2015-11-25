@@ -8,7 +8,7 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/digitala</property>
         <property name="hibernate.connection.username">digitala</property>
-        <property name="hibernate.connection.password">celulares</property>
+        <property name="hibernate.connection.password">c3lul4r35</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <mapping resource="br/com/digitala/banco/Cliente.hbm.xml" />
         <mapping resource="br/com/digitala/banco/OrdemServico.hbm.xml" />
