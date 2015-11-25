@@ -148,7 +148,6 @@
           
           function enviaFormulario() {
             var json = {"idProduto":$("#idProduto").val(),"nome":$("#nomeProduto").val(),"descricao":$("#descProduto").val(),"marca":$("#marcaProduto").val(),"modelo":$("#modeloProduto").val(),"idCategoria":$("#categoriaProduto").val(),"valorProduto":$("#valorProduto").val()}
-            alert($("#categoriaProduto").val());
             $.ajax({
               url: 'rest/'+servicoAtual+'/insere',
               type: 'POST',
