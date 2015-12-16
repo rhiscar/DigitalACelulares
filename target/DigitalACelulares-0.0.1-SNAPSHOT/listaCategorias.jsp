@@ -20,11 +20,11 @@
         <div class="row">
           <div class="col-md-6 col-sm-6 centered">
             <div class="space-sep40"></div>
-            <h5>Listagem de categorias</h5>
+            <h5>Listagem de categorias </h5>
             <table id="listaCategorias" class="table hover">
               <thead>
                 <tr>
-                  <th width="20px">&nbsp;</th>
+                  <th width="20px"><div onclick="novoItem()" class="icon-file-add" data-toggle="modal" data-target="#divDadosCategoria">&nbsp;</div></th>
                   <th width="20px">&nbsp;</th>
                   <th>Nome</th>
                   <th>Descricao</th>
@@ -32,8 +32,8 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Item #</td>
-                  <td>Description</td>
+                  <td>&nbsp;</td>
+                  <td>Carregando dados...</td>
                 </tr>
               </tbody>
              </table>
@@ -73,16 +73,22 @@
          <div class="classic-form">
              <form class="form-horizontal" role="form" id="frmDadosCategoria" onsubmit="return validaFormulario(this)">
                  <div id="divNome" class="form-group">
-                     <label for="name" class="col-sm-3 control-label">Nome</label>
+                     <label for="nomeCategoria" class="col-sm-3 control-label">Nome</label>
                      <div class="col-sm-9">
                          <input type="hidden" nome="idCategoria" id="idCategoria"/>
                          <input type="text" class="form-control" id="nomeCategoria" name="nomeCategoria" placeholder="Nome"/>
                      </div>
                  </div>
                  <div id="divDescricao" class="form-group">
-                     <label for="email" class="col-sm-3 control-label">Descrição</label>
+                     <label for="descCategoria" class="col-sm-3 control-label">Descrição</label>
                      <div class="col-sm-9">
                          <textArea class="form-control" id="descCategoria" name="descCategoria" placeholder="Descricao"></textArea>
+                     </div>
+                 </div>
+                 <div id="divFoto" class="form-group">
+                     <label for="fotoCategoria" class="col-sm-3 control-label">Foto</label>
+                     <div class="col-sm-9">
+                         <input type="file" class="form-control" id="fotoCategoria" name="fotoCategoria" placeholder="Foto"/>
                      </div>
                  </div>
                  <div class="form-group">
@@ -125,9 +131,13 @@
               dataType: 'json',
               contentType: 'application/json',
               success: function(dados) {
-                history.reload();
+            	  history.reload();
               }
             });
+          }
+          
+          function novoItem() {
+        	  limpaErrosFormulario();
           }
           
           function validaFormulario(formulario) {
@@ -161,7 +171,7 @@
               
               obj += "<tr>";
               obj += "<td><div onclick=\"editarRegistro('" + cad.idCategoria + "')\" class=\"icon-edit-modify-streamline\" data-toggle=\"modal\" data-target=\"#divDadosCategoria\">&nbsp;</div></td>";
-              obj += "<td><div onclick=\"removerRegistro('" + cad.idCategoria + "')\" class=\"icon-delete-garbage-streamline\" data-toggle=\"modal\" data-target=\"#divDadosCategoria\">&nbsp;</div></td>";
+              obj += "<td><div onclick=\"removerRegistro('" + cad.idCategoria + "')\" class=\"icon-delete-garbage-streamline\">&nbsp;</div></td>";
               obj += "<td>"+cad.nome+"</td>";
               obj += "<td>"+cad.descricao+"</td>";
               obj += "</tr>";
@@ -171,7 +181,7 @@
           
           function carregaFormulario(dados) {
             limpaErrosFormulario();
-            alert(dados.idCategoria);
+            //(dados.idCategoria);
             $("#idCategoria").val(dados.idCategoria);
             $("#nomeCategoria").val(dados.nome);
             $("#descCategoria").val(dados.descricao);
@@ -186,25 +196,40 @@
               //dataType: 'json',
               contentType: 'application/json',
               success: function(dados) {
-                carregaFormulario(dados);
+            	  carregaFormulario(dados);
               }
             });
           }
           
           function removerRegistro(id) {
-            alert("Removendo o registro " + id);
+        	  if (confirm ("Confirma remoção do registro?")) {
+	        	  $.ajax({
+	                  url: 'rest/'+servicoAtual+'/remove/'+id,
+	                  type: 'DELETE',
+	                  //data: JSON.stringify(formulario),
+	                  //dataType: 'json',
+	                  contentType: 'application/json',
+	                  success: function(dados) {
+	                	  buscaDados();
+	                  }
+	                });
+      		  }
           }
           
-          $.ajax({
-              url: 'rest/'+servicoAtual+'/pesquisa/*',
-              type: 'GET',
-              //data: JSON.stringify(formulario),
-              //dataType: 'json',
-              contentType: 'application/json',
-              success: function(data) {
-                carregaListagem(data);
-              }
-          });
+          function buscaDados(){
+	          $.ajax({
+	              url: 'rest/'+servicoAtual+'/pesquisa/*',
+	              type: 'GET',
+	              //data: JSON.stringify(formulario),
+	              //dataType: 'json',
+	              contentType: 'application/json',
+	              success: function(data) {
+	                carregaListagem(data);
+	              }
+	          });
+          }
+          
+          buscaDados();
 
         </script>
     </body>

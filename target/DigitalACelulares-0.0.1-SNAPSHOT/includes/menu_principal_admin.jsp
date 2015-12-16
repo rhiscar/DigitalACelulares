@@ -39,10 +39,10 @@
                                             </a>
                                             <ul>
                                                 <li>
-                                                    <a href="cadastroClientes.jsp"> Cadastro de Clientes </a>
+                                                    <a href="listaClientes.jsp"> Cadastro de Clientes </a>
                                                 </li>
                                                 <li>
-                                                    <a href="cadastroEmpresa.jsp"> Cadastro de Empresas </a>
+                                                    <a href="listaEmpresas.jsp"> Cadastro de Empresas </a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -57,10 +57,10 @@
                                             </a>
                                             <ul>
                                                 <li>
-                                                    <a href="cadastroProdutos.jsp"> Cadastro de Produtos </a>
+                                                    <a href="listaProdutos.jsp"> Cadastro de Produtos </a>
                                                 </li>
                                                 <li>
-                                                    <a href="cadastroCategorias.jsp"> Cadastro de Categorias </a>
+                                                    <a href="listaCategorias.jsp"> Cadastro de Categorias </a>
                                                 </li>
                                             </ul>
                                         </li>

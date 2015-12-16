@@ -20,8 +20,11 @@
         <property name="modelo" type="string">
             <column name="Modelo" length="50" />
         </property>
-        <property name="valorProduto" type="java.lang.Float">
-            <column name="Valor_Produto" precision="3" not-null="true" />
+        <property name="valorUnitario" type="java.lang.Float">
+            <column name="valorUnitario" precision="3" not-null="true" />
+        </property>
+        <property name="valorAtacado" type="java.lang.Float">
+            <column name="valorAtacado" precision="3" not-null="true" />
         </property>
         <property name="idCategoria" type="java.lang.Integer">
             <column name="idCategoria" not-null="true" />

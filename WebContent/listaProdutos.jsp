@@ -28,13 +28,14 @@
                   <th width="20px">&nbsp;</th>
                   <th>Nome</th>
                   <th>Descricao</th>
-                  <th>Valor Produto</th>
+                  <th>Valor Unitário</th>
+                  <th>Valor Atacado</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>&nbsp;</td>
-                  <td colspan="2">Carregando dados...</td>
+                  <td colspan="5">Carregando dados...</td>
                 </tr>
               </tbody>
              </table>
@@ -104,21 +105,30 @@
                          <input type="text" class="form-control" id="modeloProduto" name="modeloProduto" placeholder="Modelo"/>
                      </div>
                  </div>
-                 <div id="divValor" class="form-group">
-                     <label for="valorProduto" class="col-sm-3 control-label">Valor</label>
+                 <div id="divValorUnitario" class="form-group">
+                     <label for="valorUnitario" class="col-sm-3 control-label">Valor Unitário</label>
                      <div class="col-sm-9">
-                         <input type="text" class="form-control" id="valorProduto" name="valorProduto" placeholder="Valor"/>
+                         <input type="text" class="form-control" id="valorUnitario" name="valorUnitario" placeholder="Valor"/>
+                     </div>
+                 </div>
+                 <div id="divValorAtacado" class="form-group">
+                     <label for="valorProduto" class="col-sm-3 control-label">Valor Atacado</label>
+                     <div class="col-sm-9">
+                         <input type="text" class="form-control" id="valorAtacado" name="valorAtacado" placeholder="Valor"/>
+                     </div>
+                 </div>
+
+                 <div class="form-group">
+                     <div class="col-sm-offset-3 col-sm-9">
+                         <button type="button" id="btnCriaProduto" onclick="enviaFormulario()" class="btn btn-block btn-primary">Salvar Produto</button>
                      </div>
                  </div>
                  <div id="divFoto" class="form-group">
                      <label for="fotoProduto" class="col-sm-3 control-label">Foto</label>
                      <div class="col-sm-9">
+                       <form action="rest/servicoProduto/uploadImagemProduto" id="frmFotoProduto" method="post" enctype="multipart/form-data">
                          <input type="file" class="form-control" id="fotoProduto" name="fotoProduto" placeholder="Foto"/>
-                     </div>
-                 </div>
-                 <div class="form-group">
-                     <div class="col-sm-offset-3 col-sm-9">
-                         <button type="submit" id="btnCriaProduto" class="btn btn-block btn-primary">Salvar Produto</button>
+                       </form>
                      </div>
                  </div>
              </form>
@@ -147,7 +157,7 @@
           }
           
           function enviaFormulario() {
-            var json = {"idProduto":$("#idProduto").val(),"nome":$("#nomeProduto").val(),"descricao":$("#descProduto").val(),"marca":$("#marcaProduto").val(),"modelo":$("#modeloProduto").val(),"idCategoria":$("#categoriaProduto").val(),"valorProduto":$("#valorProduto").val()}
+            var json = {"idProduto":$("#idProduto").val(),"nome":$("#nomeProduto").val(),"descricao":$("#descProduto").val(),"marca":$("#marcaProduto").val(),"modelo":$("#modeloProduto").val(),"idCategoria":$("#categoriaProduto").val(),"valorUnitario":$("#valorUnitario").val(),"valorAtacado":$("#valorAtacado").val()}
             $.ajax({
               url: 'rest/'+servicoAtual+'/insere',
               type: 'POST',
@@ -155,9 +165,13 @@
               dataType: 'json',
               contentType: 'application/json',
               success: function(dados) {
-           	  	history.reload();
+            	  $("frmFotoProduto").action = "rest/servicoProduto/uploadImagemProduto/" + $("#idProduto").val();
+                $("frmFotoProduto").submit();
+                alert("Mudou!");
+            	 // history.reload();
               }
             });
+            
             return false;
           }
           
@@ -199,7 +213,8 @@
               obj += "<td><div onclick=\"removerRegistro('" + cad.idProduto + "')\" class=\"icon-delete-garbage-streamline\">&nbsp;</div></td>";
               obj += "<td>"+cad.nome+"</td>";
               obj += "<td>"+cad.descricao+"</td>";
-              obj += "<td>"+cad.valorProduto+"</td>";
+              obj += "<td>"+cad.valorUnitario+"</td>";
+              obj += "<td>"+cad.valorAtacado+"</td>";
               obj += "</tr>";
             });
             corpoListagem.append(obj);
@@ -211,6 +226,10 @@
             $("#idProduto").val(dados.idProduto);
             $("#nomeProduto").val(dados.nome);
             $("#descProduto").val(dados.descricao);
+            $("#marcaProduto").val(dados.marca);
+            $("#modeloProduto").val(dados.modelo);
+            $("#valorUnitario").val(dados.valorUnitario);
+            $("#valorAtacado").val(dados.valorAtacado);
             $("#nomeProduto").focus();
           }
           

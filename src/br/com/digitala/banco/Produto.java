@@ -14,7 +14,9 @@ public class Produto implements java.io.Serializable {
 	private String descricao;
 	private String marca;
 	private String modelo;
-	private Float valorProduto;
+	private Float valorUnitario;
+	private Float valorAtacado;
+
 	private String caminhoFoto;
 
 	public Produto() {
@@ -24,7 +26,7 @@ public class Produto implements java.io.Serializable {
 			Integer idCategoria) {
 		this.nome = nome;
 		this.descricao = descricao;
-		this.valorProduto = valorProduto;
+		this.valorUnitario = valorProduto;
 		this.idCategoria = idCategoria;
 	}
 
@@ -34,7 +36,7 @@ public class Produto implements java.io.Serializable {
 		this.descricao = descricao;
 		this.marca = marca;
 		this.modelo = modelo;
-		this.valorProduto = valorProduto;
+		this.valorUnitario = valorProduto;
 		this.idCategoria = idCategoria;
 	}
 
@@ -78,12 +80,20 @@ public class Produto implements java.io.Serializable {
 		this.modelo = modelo;
 	}
 
-	public Float getValorProduto() {
-		return this.valorProduto;
+	public Float getValorUnitario() {
+		return valorUnitario;
 	}
 
-	public void setValorProduto(Float valorProduto) {
-		this.valorProduto = valorProduto;
+	public void setValorUnitario(Float valorUnitario) {
+		this.valorUnitario = valorUnitario;
+	}
+
+	public Float getValorAtacado() {
+		return valorAtacado;
+	}
+
+	public void setValorAtacado(Float valorAtacado) {
+		this.valorAtacado = valorAtacado;
 	}
 
 	public Integer getIdCategoria() {
