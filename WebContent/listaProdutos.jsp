@@ -117,7 +117,8 @@
                          <input type="text" class="form-control" id="valorAtacado" name="valorAtacado" placeholder="Valor"/>
                      </div>
                  </div>
-
+             </form>
+            <form class="form-horizontal" role="form" target="_blank" action="rest/servicoProduto/uploadImagemProduto/" id="frmFotoProduto" name="frmFotoProduto" method="post" enctype="multipart/form-data">
                  <div class="form-group">
                      <div class="col-sm-offset-3 col-sm-9">
                          <button type="button" id="btnCriaProduto" onclick="enviaFormulario()" class="btn btn-block btn-primary">Salvar Produto</button>
@@ -126,12 +127,16 @@
                  <div id="divFoto" class="form-group">
                      <label for="fotoProduto" class="col-sm-3 control-label">Foto</label>
                      <div class="col-sm-9">
-                       <form action="rest/servicoProduto/uploadImagemProduto" id="frmFotoProduto" method="post" enctype="multipart/form-data">
+	                     <a href="#" class="thumbnail">
+										     <img src="/images/produtos/bigProduto1.jpg" alt="Teste">
+										   </a>
+									   </div>
+                     <div class="col-sm-9">
                          <input type="file" class="form-control" id="fotoProduto" name="fotoProduto" placeholder="Foto"/>
-                       </form>
+                         <button type="submit" id="btnSalvaFoto">Salva Foto</button>
                      </div>
                  </div>
-             </form>
+            </form>
          </div>
 <!--.content-wrapper end -->
       </div>
@@ -165,10 +170,9 @@
               dataType: 'json',
               contentType: 'application/json',
               success: function(dados) {
-            	  $("frmFotoProduto").action = "rest/servicoProduto/uploadImagemProduto/" + $("#idProduto").val();
-                $("frmFotoProduto").submit();
-                alert("Mudou!");
-            	 // history.reload();
+            	  $("#frmFotoProduto").attr('action', 'rest/servicoProduto/uploadImagemProduto/' + $("#idProduto").val());
+                $("#frmFotoProduto").submit();
+                window.setTimeout('location.reload()', 100);
               }
             });
             
@@ -222,7 +226,6 @@
           
           function carregaFormulario(dados) {
             limpaErrosFormulario();
-            //(dados.idProduto);
             $("#idProduto").val(dados.idProduto);
             $("#nomeProduto").val(dados.nome);
             $("#descProduto").val(dados.descricao);

@@ -1,10 +1,7 @@
 package br.com.digitala.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -13,10 +10,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.xml.ws.Response;
 
 import br.com.digitala.banco.Produto;
 import br.com.digitala.banco.ProdutoHome;
+import br.com.digitala.utils.DigitalAUtils;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
@@ -46,39 +43,31 @@ public class ProdutoService extends BasicService<Produto> {
 
 		System.out.println("Entrou no código para salvar a foto do produto");
 		
-		String uploadedFileLocation = "d://digitala/produtos/" + fileDetail.getFileName();
+		
+		try {
+			System.out.println("CAMINHO SERVIDOR: " + DigitalAUtils.getImagesFolder());
+			File folderConfirmation = new File(DigitalAUtils.getImagesFolder()+"/produtos");
+			if (!folderConfirmation.exists()) {
+				folderConfirmation.mkdir();
+				folderConfirmation = null;
+			}
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		}
+		
+		String uploadedFileLocation = DigitalAUtils.getImagesFolder()+"/produtos/bigProduto"+id+DigitalAUtils.getFileExtFromName(fileDetail.getFileName()); //+ fileDetail.getFileName();
 
 		// save it
-		writeToFile(uploadedInputStream, uploadedFileLocation);
+		DigitalAUtils.writeToFile(uploadedInputStream, uploadedFileLocation);
 
 		String output = "File uploaded to : " + uploadedFileLocation;
 
+		System.out.println(output);
 		
-		
-		return null;
+		return "Arquivo salvo com sucesso!";
 
 	}
 
-	// save uploaded file to new location
-	private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) {
-
-		try {
-			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
-			int read = 0;
-			byte[] bytes = new byte[1024];
-
-			out = new FileOutputStream(new File(uploadedFileLocation));
-			while ((read = uploadedInputStream.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
-			}
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-
-	}
 
 	@Override
 	protected String executaRemove(Integer id) {

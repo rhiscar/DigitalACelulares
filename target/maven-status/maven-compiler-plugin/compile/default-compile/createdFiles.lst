@@ -4,6 +4,7 @@ br\com\digitala\banco\EmpresaHome.class
 br\com\digitala\banco\Categoria.class
 br\com\digitala\banco\PedidoId.class
 br\com\digitala\banco\ValorProduto.class
+br\com\digitala\utils\DigitalAUtils.class
 br\com\digitala\service\OrdemServicoService.class
 br\com\digitala\banco\OrdemServicoHome.class
 br\com\digitala\service\CategoriaService.class
