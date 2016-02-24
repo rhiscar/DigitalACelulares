@@ -16,14 +16,14 @@ public class Produto implements java.io.Serializable {
 	private String modelo;
 	private Float valorUnitario;
 	private Float valorAtacado;
+	private String codigo;
 
 	private String caminhoFoto;
 
 	public Produto() {
 	}
 
-	public Produto(String nome, String descricao, Float valorProduto,
-			Integer idCategoria) {
+	public Produto(String nome, String descricao, Float valorProduto, Integer idCategoria) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.valorUnitario = valorProduto;
@@ -110,6 +110,14 @@ public class Produto implements java.io.Serializable {
 
 	public void setCaminhoFoto(String caminhoFoto) {
 		this.caminhoFoto = caminhoFoto;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 }

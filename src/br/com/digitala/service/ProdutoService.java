@@ -64,7 +64,7 @@ public class ProdutoService extends BasicService<Produto> {
 
 		System.out.println(output);
 		
-		return "Arquivo salvo com sucesso!";
+		return "Arquivo salvo com sucesso!<br/> <button onclick='window.close();'>Fechar</button>";
 
 	}
 

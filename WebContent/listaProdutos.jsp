@@ -7,35 +7,165 @@
 <!--[if IE 8]>
 <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js"> <!--<![endif]-->
+<html ng-app="digitala"> <!--<![endif]-->
     <body>
         <%@include  file="/includes/header.jsp" %>
         <%@include  file="/includes/header_menu.jsp" %>
         <%@include  file="/includes/menu_principal_admin.jsp" %>
+
+        <script>
+          var digitala = angular.module('digitala', []);
+        
+	        //PRODUTO SERVICE
+	        digitala.service('produtoService', function($http, $q){
+	        	
+	        	this.listaProdutos = function(){
+	        		var def = $q.defer();
+	        		$http({
+	        			url:'rest/'+servicoAtual+'/pesquisa/*',
+	              method: 'GET'
+	        		}).then(
+	        				  function success(response){
+	        					  def.resolve(response.data);
+	        				  },
+	        				  function error(response){
+	        					  console.log("ERROR: "+response.data);
+	        				  }
+	        		);
+	        		
+	        		return def.promise;
+	        	}
+	        });
+	        
+	        //CATEGORIA SERVICE
+	       digitala.service('categoriaService', function($http, $q){
+	    	   
+	    	    this.listaCategorias = function(){
+	    	    	var def = $q.defer();
+	    	    	$http({
+	    	    		url: 'rest/servicoCategoria/pesquisa/*',
+	    	    		method:'GET'
+	    	    		
+	    	    	}).then(
+	    	    			  function success(response){
+	    	    				  
+	    	    				  def.resolve(response.data);
+	    	    				  
+	    	    			  }, 
+	    	    			  function error(response){
+	    	    				  
+	    	    				  console.log('ERROR:'+response.data);
+	    	    				  
+	    	    			  }	
+	    	    	);
+	    	    	return def.promise;
+	    	    	
+	    	    }
+	       });
+	        
+	        //PRODUTO CONTROLLER
+	        digitala.controller('produtoController', function($scope, produtoService){
+
+	        	$scope.listaProdutos = function (){
+	        		
+	        	  produtoService.listaProdutos().then(
+	        		 function(response){
+	        			
+	        			 $scope.produtos = response;
+	        		 }	  
+	        	  );
+	        	 
+	        	}//fim da funcao listaProdutos
+	        	
+            $scope.currentPage = 0;
+            $scope.pageSize = 10;
+            $scope.numberOfPages=function(){
+                return Math.ceil($scope.produtos.length/$scope.pageSize);                
+            }
+	        	
+	        	$scope.editProduct = function (dados) {
+	        		
+	                limpaErrosFormulario();
+	                $("#idProduto").val(dados.idProduto);
+	                $("#nomeProduto").val(dados.nome);
+	                $("#descProduto").val(dados.descricao);
+	                $("#marcaProduto").val(dados.marca);
+	                $("#modeloProduto").val(dados.modelo);
+	                $("#valorUnitario").val(dados.valorUnitario);
+	                $("#valorAtacado").val(dados.valorAtacado);
+	                $("#fotoProduto").attr("src", "images/produtos/bigProduto"+dados.idProduto+".jpg");
+	                $("#nomeProduto").focus();
+	              };
+	
+	               $scope.listaProdutos();
+	        	  
+	        });
+	        
+	        //CATEGORIA CONTROLLER
+	        digitala.controller('categoriaController', function($scope,categoriaService){
+	        	
+	        	$scope.listaCategorias = function(){
+	              categoriaService.listaCategorias().then(
+	            		  function(response){
+	            			  $scope.categorias = response;
+	            		  }	  
+	              );
+	             }
+	        	
+	            $scope.listaCategorias();
+	        });
+          
+          digitala.filter('startFrom', function() {
+              return function(input, start) {
+                  start = +start; //parse to int
+                  return input.slice(start);
+              }
+          });
+        </script>
         
         <!-- Page actual content -->
 
 
         <!-- Items list -->
-        <div class="row">
+        <div class="row" ng-controller="produtoController">
           <div class="col-md-6 col-sm-6 centered">
             <div class="space-sep40"></div>
-            <h5>Listagem de produtos </h5>
+            <h5>Listagem de produtos <input ng-model="filtro" ></h5>
+            <br/>
+            
             <table id="listaProdutos" class="table hover">
               <thead>
                 <tr>
                   <th width="20px"><div onclick="novoItem()" class="icon-file-add" data-toggle="modal" data-target="#divDadosProduto">&nbsp;</div></th>
                   <th width="20px">&nbsp;</th>
-                  <th>Nome</th>
-                  <th>Descricao</th>
+                  <th width="50%">Nome</th>
                   <th>Valor Unitário</th>
                   <th>Valor Atacado</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr ng-show="!produtos.length">
                   <td>&nbsp;</td>
-                  <td colspan="5">Carregando dados...</td>
+                  <td colspan="4">Carregando dados...</td>
+                </tr>
+                <tr ng-repeat="produto in produtos | filter:filtro | startFrom:currentPage*pageSize | limitTo:pageSize"">
+	                <td><div ng-click="editProduct(produto);" class="icon-edit-modify-streamline" data-toggle="modal" data-target="#divDadosProduto">&nbsp;</div></td>
+	                <td><div ng-click="removerRegistro('{{produto.idProduto}}')" class="icon-delete-garbage-streamline">&nbsp;</div></td>
+	                <td>{{produto.nome}}</td>
+	                <td>{{produto.valorUnitario}}</td>
+	                <td>{{produto.valorAtacado}}</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td colspan="4">
+                      <button class="" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+									        Anterior
+									    </button>
+									    {{currentPage+1}}/{{numberOfPages()}}
+									    <button class="" ng-disabled="currentPage >= produtos.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+									        Próxima
+									    </button>
+                </td>
                 </tr>
               </tbody>
              </table>
@@ -46,7 +176,7 @@
 
         <!-- Item editing -->
       <!-- Modal -->
-<div class="modal fade" id="divDadosProduto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="divDadosProduto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -74,12 +204,16 @@
          
          <div class="classic-form">
              <form class="form-horizontal" role="form" id="frmDadosProduto" onsubmit="return validaFormulario(this); return false;">
+                 
                  <div id="divCategoria" class="form-group">
                      <label for="nomeProduto" class="col-sm-3 control-label">Categoria</label>
-                     <div class="col-sm-9">
-                         <select class="form-control" id="categoriaProduto" name="categoriaProduto"></select>
+                     <div class="col-sm-9" ng-controller="categoriaController">
+                         <select class="form-control" id="categoriaProduto" name="categoriaProduto">
+                            <option ng-repeat="c in categorias" value="{{c.idCategoria}}">{{ c.nome }} </option>
+                         </select>
                      </div>
                  </div>
+                 
                  <div id="divNome" class="form-group">
                      <label for="nomeProduto" class="col-sm-3 control-label">Nome</label>
                      <div class="col-sm-9">
@@ -128,12 +262,12 @@
                      <label for="fotoProduto" class="col-sm-3 control-label">Foto</label>
                      <div class="col-sm-9">
 	                     <a href="#" class="thumbnail">
-										     <img src="/images/produtos/bigProduto1.jpg" alt="Teste">
+										     <img id="fotoProduto" src="images/no-image.jpg" alt="Teste">
 										   </a>
 									   </div>
+									   <label for="fotoProduto" class="col-sm-3 control-label">Arquivo upload</label>
                      <div class="col-sm-9">
                          <input type="file" class="form-control" id="fotoProduto" name="fotoProduto" placeholder="Foto"/>
-                         <button type="submit" id="btnSalvaFoto">Salva Foto</button>
                      </div>
                  </div>
             </form>
@@ -216,7 +350,11 @@
               obj += "<td><div onclick=\"editarRegistro('" + cad.idProduto + "')\" class=\"icon-edit-modify-streamline\" data-toggle=\"modal\" data-target=\"#divDadosProduto\">&nbsp;</div></td>";
               obj += "<td><div onclick=\"removerRegistro('" + cad.idProduto + "')\" class=\"icon-delete-garbage-streamline\">&nbsp;</div></td>";
               obj += "<td>"+cad.nome+"</td>";
-              obj += "<td>"+cad.descricao+"</td>";
+              if (cad.descricao != undefined) {
+            	  obj += "<td>"+cad.descricao+"</td>";
+              } else {
+            	  obj += "<td>&nbsp;</td>";
+              }
               obj += "<td>"+cad.valorUnitario+"</td>";
               obj += "<td>"+cad.valorAtacado+"</td>";
               obj += "</tr>";
@@ -233,6 +371,7 @@
             $("#modeloProduto").val(dados.modelo);
             $("#valorUnitario").val(dados.valorUnitario);
             $("#valorAtacado").val(dados.valorAtacado);
+            $("#fotoProduto").attr("src", "images/produtos/bigProduto"+dados.idProduto+".jpg");
             $("#nomeProduto").focus();
           }
           
@@ -269,8 +408,9 @@
         	  	$("#categoriaProduto").append('<option value="' + cat.idCategoria + '">' + cat.nome + '</option>');
         	  });
           }
-          
+
           function buscaDados(){
+        	  var retListaProdutos = null;
 	          $.ajax({
 	              url: 'rest/'+servicoAtual+'/pesquisa/*',
 	              type: 'GET',
@@ -278,9 +418,11 @@
 	              //dataType: 'json',
 	              contentType: 'application/json',
 	              success: function(data) {
-	                carregaListagem(data);
+	                //carregaListagem(data);
+	                retListaProdutos = data;
 	              }
 	          });
+	          
 	          $.ajax({
 	              url: 'rest/servicoCategoria/pesquisa/*',
 	              type: 'GET',
@@ -291,9 +433,8 @@
 	                carregaListaCategorias(listaCategorias);
 	              }
 	          });
+	          return retListaProdutos;
           }
-
-          buscaDados();
         </script>
     </body>
 </html>

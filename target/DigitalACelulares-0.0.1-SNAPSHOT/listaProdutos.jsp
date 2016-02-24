@@ -128,12 +128,12 @@
                      <label for="fotoProduto" class="col-sm-3 control-label">Foto</label>
                      <div class="col-sm-9">
 	                     <a href="#" class="thumbnail">
-										     <img src="/images/produtos/bigProduto1.jpg" alt="Teste">
+										     <img id="fotoProduto" src="images/no-image.jpg" alt="Teste">
 										   </a>
 									   </div>
+									   <label for="fotoProduto" class="col-sm-3 control-label">Arquivo upload</label>
                      <div class="col-sm-9">
                          <input type="file" class="form-control" id="fotoProduto" name="fotoProduto" placeholder="Foto"/>
-                         <button type="submit" id="btnSalvaFoto">Salva Foto</button>
                      </div>
                  </div>
             </form>
@@ -233,6 +233,7 @@
             $("#modeloProduto").val(dados.modelo);
             $("#valorUnitario").val(dados.valorUnitario);
             $("#valorAtacado").val(dados.valorAtacado);
+            $("#fotoProduto").attr("src", "images/produtos/bigProduto"+dados.idProduto+".jpg");
             $("#nomeProduto").focus();
           }
           

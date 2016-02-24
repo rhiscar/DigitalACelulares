@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 04/06/2015 11:21:49 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="br.com.digitala.banco.ValorProduto" table="valor_produto" catalog="digitala">
+        <id name="idvalorProduto" type="java.lang.Integer">
+            <column name="idvalor_produto" />
+            <generator class="identity" />
+        </id>
+        <property name="idProduto" type="int">
+            <column name="idProduto" not-null="true" />
+        </property>
+        <property name="idEmpresa" type="int">
+            <column name="idEmpresa" not-null="true" />
+        </property>
+        <property name="valorProduto" type="big_decimal">
+            <column name="Valor_Produto" precision="10" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

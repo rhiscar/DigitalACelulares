@@ -10,7 +10,7 @@
 <html class="no-js"> <!--<![endif]-->
     <body>
         <%@include  file="/includes/header.jsp" %>
-        <%@include  file="/includes/header_menu.jsp" %>
+        <%@include  file="/includes/header_menu_admin.jsp" %>
         <%@include  file="/includes/menu_principal_admin.jsp" %>
         
         <!-- Page actual content -->

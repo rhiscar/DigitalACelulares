@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
                 <div class="rev-slider-full">
                     <div class="rev-slider-banner-full  rev-slider-full">
-                        <ul>
-
+                        <ul id="produtosDestacados">
 
                             <li data-transition="fade" data-slotamount="7" data-masterspeed="300" >
                                 <img src="images/placeholders/slider1/bg1.jpg"  alt="rev-full1" data-fullwidthcentering="on">
@@ -79,3 +78,35 @@
                         <div class="tp-bannertimer tp-bottom"></div>
                     </div>
                 </div></div><!--.top wrapper end -->
+                <script>
+                
+                window.onload = function () {
+	                var novaLi = "";
+	                novaLi = novaLi + "<li  data-transition=\"slideleft\" data-slotamount=\"14\">";
+	                novaLi = novaLi + " <img src=\"images/placeholders/slider1/bg2.jpg\" alt=\"Rev Full\">";
+	
+	                novaLi = novaLi + " <div class=\"caption sfb\" data-x=\"693\" data-y=\"75\" data-speed=\"700\" data-start=\"0\"";
+	                novaLi = novaLi + "    data-easing=\"easeOutBack\">";
+	                novaLi = novaLi + "   <img src=\"images/produtos/bigProduto1.jpg\" alt=\"\"/>";
+	                novaLi = novaLi + " </div>";
+	
+	                novaLi = novaLi + " <div class=\"tp-caption slider-text-title sft str\"";
+	                novaLi = novaLi + "    data-x=\"20\"";
+	                novaLi = novaLi + "    data-y=\"150\"";
+	                novaLi = novaLi + "    data-speed=\"300\"";
+	                novaLi = novaLi + "    data-start=\"800\"";
+	                novaLi = novaLi + "    data-easing=\"easeOutCubic\" data-end=\"6000\" data-endspeed=\"500\">Acessórios para Celulares Dinamicos</div>";
+	
+	                novaLi = novaLi + " <div class=\"tp-caption slider-text-description sft str\"  data-x=\"20\" data-y=\"200\" data-start=\"1000\" data-easing=\"easeOutBack\" data-end=\"4500\" data-endspeed=\"500\">";
+	                novaLi = novaLi + "   Capinhas para celular multimarcas,<br/> ";
+	                novaLi = novaLi + "   para várias versões de android. Apenas R$10,00.";
+	                novaLi = novaLi + " </div>";
+	
+	                novaLi = novaLi + " <div class=\"tp-caption slider-text-description sft str\"  data-x=\"20\" data-y=\"280\" data-start=\"1500\" data-easing=\"easeOutBack\"data-end=\"5000\" data-endspeed=\"500\">";
+	                novaLi = novaLi + "   <a href=\"#\" class=\"button btn-flat\">Capa para celular</a>";
+	                novaLi = novaLi + " </div>";
+	                novaLi = novaLi + "</li>";
+	                 
+	                $("#produtosDestacados").append(novaLi);
+                };
+                </script>

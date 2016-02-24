@@ -17,6 +17,13 @@
         <!--- This should placed first off all other scripts -->
 
         <script type="text/javascript" src="js/json2.js"></script>
+        <!-- script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular-route.min.js"></script-->
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+        
 
 
         <link rel="stylesheet" href="css/revolution_settings.css">
