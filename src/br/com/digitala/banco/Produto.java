@@ -17,6 +17,7 @@ public class Produto implements java.io.Serializable {
 	private Float valorUnitario;
 	private Float valorAtacado;
 	private String codigo;
+	private String destaque;
 
 	private String caminhoFoto;
 
@@ -118,6 +119,14 @@ public class Produto implements java.io.Serializable {
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+
+	public String getDestaque() {
+		return destaque;
+	}
+
+	public void setDestaque(String destaque) {
+		this.destaque = destaque;
 	}
 
 }

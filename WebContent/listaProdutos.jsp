@@ -88,11 +88,13 @@
 	                limpaErrosFormulario();
 	                $("#idProduto").val(dados.idProduto);
 	                $("#nomeProduto").val(dados.nome);
+	                $("#categoriaProduto").val(dados.idCategoria);
 	                $("#descProduto").val(dados.descricao);
 	                $("#marcaProduto").val(dados.marca);
 	                $("#modeloProduto").val(dados.modelo);
 	                $("#valorUnitario").val(dados.valorUnitario);
 	                $("#valorAtacado").val(dados.valorAtacado);
+	                $("#destaque").val(dados.destaque);
 	                $("#fotoProduto").attr("src", "images/produtos/bigProduto"+dados.idProduto+".jpg");
 	                $("#nomeProduto").focus();
 	              };
@@ -251,6 +253,16 @@
                          <input type="text" class="form-control" id="valorAtacado" name="valorAtacado" placeholder="Valor"/>
                      </div>
                  </div>
+                 <div id="divDestaque" class="form-group">
+                     <label for="valorProduto" class="col-sm-3 control-label">Destaque</label>
+                     <div class="col-sm-9">
+                         <select class="form-control" id="destaque" name="destaque">
+                          <option value="S">Sim</option>
+                          <option value="N">Não</option>
+                         </select>
+                         
+                     </div>
+                 </div>
              </form>
             <form class="form-horizontal" role="form" target="_blank" action="rest/servicoProduto/uploadImagemProduto/" id="frmFotoProduto" name="frmFotoProduto" method="post" enctype="multipart/form-data">
                  <div class="form-group">
@@ -296,7 +308,7 @@
           }
           
           function enviaFormulario() {
-            var json = {"idProduto":$("#idProduto").val(),"nome":$("#nomeProduto").val(),"descricao":$("#descProduto").val(),"marca":$("#marcaProduto").val(),"modelo":$("#modeloProduto").val(),"idCategoria":$("#categoriaProduto").val(),"valorUnitario":$("#valorUnitario").val(),"valorAtacado":$("#valorAtacado").val()}
+            var json = {"idProduto":$("#idProduto").val(),"nome":$("#nomeProduto").val(),"descricao":$("#descProduto").val(),"marca":$("#marcaProduto").val(),"modelo":$("#modeloProduto").val(),"idCategoria":$("#categoriaProduto").val(),"valorUnitario":$("#valorUnitario").val(),"valorAtacado":$("#valorAtacado").val(),"destaque":$("#destaque").val()}
             $.ajax({
               url: 'rest/'+servicoAtual+'/insere',
               type: 'POST',
@@ -364,8 +376,10 @@
           
           function carregaFormulario(dados) {
             limpaErrosFormulario();
+            alert('em desuso');
             $("#idProduto").val(dados.idProduto);
             $("#nomeProduto").val(dados.nome);
+            $("#categoriaProduto").val(dados.idCategoria);
             $("#descProduto").val(dados.descricao);
             $("#marcaProduto").val(dados.marca);
             $("#modeloProduto").val(dados.modelo);

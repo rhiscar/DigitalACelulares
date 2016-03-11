@@ -2,14 +2,14 @@ package br.com.digitala.banco;
 
 // Generated 04/06/2015 11:21:49 by Hibernate Tools 3.4.0.CR1
 
-import static org.hibernate.criterion.Example.create;
-
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Home object for domain model class Produto.
@@ -107,23 +107,36 @@ public class ProdutoHome extends PersistenciaHome {
 		}
 	}
 
-	public List<Produto> findByExample(Produto instance) {
+	public List<Produto> findDestaques() {
 		log.debug("finding Produto instance by example");
 		try {
 			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
 			List<Produto> results; 
-//			if (instance != null && instance.getNome() != null && !"".equals(instance.getNome().trim())) {
-//				System.out.println("buscando lista com filtro");
-//				results = (List<Produto>) getSessionFactory()
-//					.getCurrentSession()
-//					.createCriteria("br.com.digitala.banco.Produto")
-//					.add(create(instance)).list();
-//			} else {
-				System.out.println("buscando lista sem filtro");
-				results = (List<Produto>) getSessionFactory()
-						.getCurrentSession()
-						.createCriteria("br.com.digitala.banco.Produto").list();
-//			}
+			System.out.println("buscando lista com filtro");
+			results = (List<Produto>) getSessionFactory()
+				.getCurrentSession()
+				.createCriteria("br.com.digitala.banco.Produto")
+				.add(Restrictions.eq("destaque", "S")).list();
+			t.commit();
+			//log.debug("find by example successful, result size: " + results.size());
+			System.out.println("find by example successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			re.printStackTrace();
+			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+	
+	public List<Produto> listAll() {
+		log.debug("finding Produto instance by example");
+		try {
+			Transaction t = getSessionFactory().getCurrentSession().beginTransaction();
+			List<Produto> results; 
+			System.out.println("buscando lista sem filtro");
+			results = (List<Produto>) getSessionFactory()
+					.getCurrentSession()
+					.createCriteria("br.com.digitala.banco.Produto").list();
 			t.commit();
 			//log.debug("find by example successful, result size: " + results.size());
 			System.out.println("find by example successful, result size: " + results.size());

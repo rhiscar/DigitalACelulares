@@ -32,5 +32,8 @@
         <property name="idCategoria" type="java.lang.Integer">
             <column name="idCategoria" not-null="true" />
         </property>
+        <property name="destaque" type="string">
+            <column name="destaque" length="1" />
+        </property>
     </class>
 </hibernate-mapping>

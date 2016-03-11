@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -32,6 +33,15 @@ public class ProdutoService extends BasicService<Produto> {
 		return r;
 	}
 
+	
+	@GET
+	@Path("/destaques")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listaProdutosDestaque(){
+		List<Produto> lista = sql.findDestaques();
+		return gson.toJson(lista);
+	}
+	
 	@POST
 	@Path("/uploadImagemProduto/{id}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -90,7 +100,7 @@ public class ProdutoService extends BasicService<Produto> {
 	protected String executaPesquisa(String texto) {
 		Produto c = new Produto();
 		c.setNome(texto);
-		List<Produto> lista = sql.findByExample(c);
+		List<Produto> lista = sql.listAll();
 		String r = gson.toJson(lista);
 		System.out.println("Retorno de lista de produto: " + r);
 		return r;
